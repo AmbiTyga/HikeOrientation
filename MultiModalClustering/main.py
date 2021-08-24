@@ -21,15 +21,18 @@ def cluster_train(args):
     loader = DataLoader(dataset, batch_size=args.batch_size)
 
     # Initialize the ML model
-    args.model_path = os.path.join(args.model_path, "kmean.pkl")
+    if args.model_path:
+        args.model_path = os.path.join(args.model_path, "kmean.pkl")
+    else:
+        args.model_path = os.path.join(os.getcwd(), "kmean.pkl")
     clusterer = Clusterer(k=args.k, model_path=args.model_path, train=True)
 
     # Store output
     data["Label"] = clusterer.forward(loader)
 
     # Move and save
-    group_move(data, dataset.path)
     data.to_csv(CSV, index=False)
+    group_move(data, dataset.path)
 
 
 def cluster_test(args):
@@ -44,22 +47,25 @@ def cluster_test(args):
     loader = DataLoader(dataset, batch_size=args.batch_size)
 
     # Initialize the ML model
-    args.model_path = os.path.join(args.model_path, "kmean.pkl")
-    clusterer = Clusterer(dataloader=loader, model_path=args.model_path, train=False)
+    if args.model_path:
+        args.model_path = os.path.join(args.model_path, "kmean.pkl")
+    else:
+        args.model_path = os.path.join(os.getcwd(), "kmean.pkl")
+
+    clusterer = Clusterer(k=args.k, model_path=args.model_path, train=False)
 
     # Store output
     data["Label"] = clusterer.forward(loader)
 
     # Move and save
-    group_move(data, dataset.path)
     data.to_csv(CSV, index=False)
+
+    group_move(data, dataset.path)
 
 
 my_parser = argparse.ArgumentParser()
-subparser = my_parser.add_subparsers()
 
-clusterTrain = subparser.add_parser("cluster-train")
-clusterTest = subparser.add_parser("cluster-test")
+my_parser.add_argument("command", choices=["cluster-train", "cluster-test"])
 
 my_parser.add_argument(
     "--datapath", type=str, help="directory to the data", required=True
@@ -73,12 +79,10 @@ my_parser.add_argument(
     "--batch_size", default=2, type=int, help="batch size to load into extractors"
 )
 
-clusterTrain.set_defaults(func=cluster_train)
-clusterTest.set_defaults(func=cluster_test)
-
-
 if __name__ == "__main__":
     # Execute the parse_args() method
     args = my_parser.parse_args()
+    FUNCTION = {"cluster-train": cluster_train, "cluster-test": cluster_test}
 
-    args.func(args)
+    func = FUNCTION[args.command]
+    func(args)
