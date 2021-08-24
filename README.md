@@ -18,7 +18,7 @@ Run following commands:
 python3 DatasetScraper/main.py scrape \\
 	--url <myntra/allRecipes>
 	--filepath <path>
-	@config.txt
+	DatasetScraper/@config.txt
 ```
 
 After Scraping CLI will ask for Train set's size, and divide the dataset to `clustering_train` and `clustering_test` directory. Each directory will contain scraped images and a CSV file for textual data.
@@ -39,14 +39,14 @@ python3 MultiModalClustering/main.py cluster-train \\
 	--datapath <path>/clustering_train
 	--modelpath <path to save kmean algorithm>
 	--batch_size <number of datapoints to process at each iteration>
-	@config.txt
+	MultiModalClustering/@config.txt
 	
 ## For Testing
 python3 MultiModalClustering/main.py cluster-test \\
 	--datapath <path>/clustering_test
 	--modelpath <path to pickled kmean algorithm>
 	--batch_size <number of datapoints to process at each iteration>
-	@config.txt
+	MultiModalClustering/@config.txt
 ```
 
 After training or testing the images in clustering_train and clustering_test will be moved to clustered directory respectively with CSV file containing cluster class to which particular instance belongs to.
