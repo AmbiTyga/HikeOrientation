@@ -1,15 +1,16 @@
 import requests 
 import shutil
+import os
 
-def downloadImage(url,filename):
+def downloadImage(url,filepath,filename):
     r = requests.get(url, stream = True)
-    
+    destination = os.path.join(filepath,filename)
     if r.status_code == 200:
     # Set decode_content value to True, otherwise the downloaded image file's size will be zero.
         r.raw.decode_content = True
 
         # Open a local file with wb ( write binary ) permission.
-        with open(filename,'wb') as f:
+        with open(destination,'wb') as f:
             shutil.copyfileobj(r.raw, f)
         return filename
     else:

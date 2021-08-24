@@ -22,13 +22,15 @@ class Myntra:
     def next_fetch(self,k):
         try:
             self.browser.find_element_by_class_name('pagination-next a').send_keys(Keys.RETURN)
-            return deque(self.browser.find_elements_by_class_name("product-base")[:k]), k
+            return deque(WebDriverWait(self.browser, 8).until(EC.visibility_of_all_elements_located((By.CLASS_NAME, "product-base")))[:k]), k
         except NoSuchElementException as e:
             return None, 0
+    
+    
         
     def getElements(self,selector,filepath):
     
-        img_src = WebDriverWait(selector, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "img.img-responsive")))
+        img_src = WebDriverWait(selector, 8).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "img.img-responsive")))
 
         brand = selector.find_element_by_class_name('product-brand').text
         prod_type = selector.find_element_by_class_name('product-product').text
@@ -40,12 +42,15 @@ class Myntra:
         except NoSuchElementException as e:
             cost_price = selling_price = selector.find_element_by_class_name('product-price').text
 
-        filename = os.path.join(filepath,img_src.get_attribute('title')+'.jpg')
-        img_src = downloadImage(img_src.get_attribute('src'),filename)
+        filename = img_src.get_attribute('title')+'.jpg'
+        img_src = downloadImage(img_src.get_attribute('src'),filepath,filename)
 
         return img_src, brand, prod_type, cost_price, selling_price
         
     def get_data(self,k):
+        k = k-self.total_extracted
+        if k<=0:
+            return 
         filepath = os.path.join(self.path,"clustering_train")
         if not os.path.isdir(filepath):
             os.mkdir(filepath)
@@ -75,6 +80,7 @@ class Myntra:
 
             else :
                 products,k = self.next_fetch(k)
+
         csv_file.close()
         
         
@@ -92,9 +98,13 @@ class Myntra:
         if not os.path.isdir(path):
             os.mkdir(path)
         
-        X = lambda x: shutil.move(x,path)
-        
-        test.Img_src = test.Img_src.apply(X)
+        def X(x):
+            try:
+                shutil.move(os.path.join(self.path,"clustering_train",x),path)
+            except Exception as e:
+                pass
+
+        test.Img_src.apply(X)
         
         train.to_csv(CSV,index=False)
         
@@ -132,8 +142,8 @@ class AllRecipes:
             author = text[-1].replace('By ',"")
             img_src = WebDriverWait(selector, 20).until(EC.visibility_of_element_located((By.TAG_NAME, "img")))
             
-            filename = os.path.join(filepath,img_src.get_attribute('title')+'.jpg')
-            img_src = downloadImage(img_src.get_attribute('src'),filename)
+            filename = img_src.get_attribute('title')+'.jpg'
+            img_src = downloadImage(img_src.get_attribute('src'),filepath,filename)
         
             return img_src, title, desc, author
         
@@ -187,9 +197,14 @@ class AllRecipes:
         if not os.path.isdir(path):
             os.mkdir(path)
         
-        X = lambda x: shutil.move(x,path)
-        
-        test.Img_src = test.Img_src.apply(X)
+        def X(x):
+            try:
+                shutil.move(os.path.join(self.path,"clustering_train",x),path)
+            except Exception as e:
+                print(e)
+                pass
+
+        test.Img_src.apply(X)
         
         train.to_csv(CSV,index=False)
         

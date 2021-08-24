@@ -22,19 +22,19 @@ class Clusterer:
         texts = []
         images = []
         for batch in loader:
-            text,image = batch
-            text = self.bert(text.squeeze()).pooler_output
+            image,text = batch
+            text = self.bert(text).pooler_output
             image = self.vit(image)
             texts.append(text)
             images.append(image)
-        texts = torch.stack(texts)
-        imagess = torch.stack(images)
-        fused_repr = texts+images
+        texts = torch.cat(texts)
+        images = torch.cat(images)
+        fused_repr = (texts+images).squeeze().numpy()
         
         if self.train:
             self.kmean.fit(fused_repr)
             pickle.dump(self.kmean, open(self.model_path, 'wb'))
             return self.kmean.labels_
         
-        return self.kmeans.predict(fused_repr)
+        return self.kmean.predict(fused_repr)
         

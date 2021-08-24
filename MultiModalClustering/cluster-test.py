@@ -3,6 +3,7 @@ import os
 import sys
 from model import Clusterer
 from dataObject import MultiModalDataset
+from torch.utils.data import DataLoader
 
 def cluster_test(datapath,model_path,bs):
     CSV = os.path.join(datapath,'test.csv')
@@ -10,8 +11,8 @@ def cluster_test(datapath,model_path,bs):
     dataset = MultiModalDataset(CSV)
     loader = DataLoader(dataset,batch_size=bs)
     clusterer = Clusterer(dataloader=loader,model_path = model_path,train=False)
-    return clusterer.forward(loader)
-    
+    out = clusterer.forward(loader)
+    print(out)
     
 if __name__ == '__main__':
     my_parser = argparse.ArgumentParser(description='Test Clustering')
