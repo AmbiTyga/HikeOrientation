@@ -39,7 +39,7 @@ scraper.add_argument(
 )
 
 scraper.add_argument(
-    "--total_size", default=10, type=int, help="total no. of datapoints to be scraped"
+    "--total_size", default="@config.txt", type=int, help="total no. of datapoints to be scraped"
 )
 
 scraper.add_argument(

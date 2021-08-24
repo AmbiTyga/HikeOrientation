@@ -75,7 +75,7 @@ my_parser.add_argument(
     "--model_path", type=str, help="path to the directory for output model"
 )
 
-my_parser.add_argument("--k", default=2, type=int, help="no. of clusters")
+my_parser.add_argument("--k", default="@config.txt", type=int, help="no. of clusters")
 
 my_parser.add_argument(
     "--batch_size", default=2, type=int, help="batch size to load into extractors"
