@@ -322,36 +322,36 @@ class AllRecipes:
         csv_file.close()
 
 
-def divide(self, N):
-    """
-    Divide dataset to train set of size N and test set of (total_extracted - N)
-    """
+    def divide(self, N):
+        """
+        Divide dataset to train set of size N and test set of (total_extracted - N)
+        """
 
-    assert N < self.total_extracted, f"N should be less than {self.total_extracted}"
+        assert N < self.total_extracted, f"N should be less than {self.total_extracted}"
 
-    CSV = os.path.join(self.path, "clustering_train", "train.csv")
-    data = pd.read_csv(CSV)
+        CSV = os.path.join(self.path, "clustering_train", "train.csv")
+        data = pd.read_csv(CSV)
 
-    train = data.iloc[:N, :].copy()
-    test = data.iloc[N:, :].copy()
+        train = data.iloc[:N, :].copy()
+        test = data.iloc[N:, :].copy()
 
-    # Create directory for test set
-    path = os.path.join(self.path, "clustering_test")
-    if not os.path.isdir(path):
-        os.mkdir(path)
+        # Create directory for test set
+        path = os.path.join(self.path, "clustering_test")
+        if not os.path.isdir(path):
+            os.mkdir(path)
 
-    # local function to check and move from clustering_train->clustering_test
-    def X(x):
-        try:
-            shutil.move(os.path.join(self.path, "clustering_train", x), path)
-        except Exception as e:
-            pass
+        # local function to check and move from clustering_train->clustering_test
+        def X(x):
+            try:
+                shutil.move(os.path.join(self.path, "clustering_train", x), path)
+            except Exception as e:
+                pass
 
-    test.Img_src.apply(X)
+        test.Img_src.apply(X)
 
-    # Change the train.csv
-    train.to_csv(CSV, index=False)
+        # Change the train.csv
+        train.to_csv(CSV, index=False)
 
-    # Save test.csv
-    testCSV = os.path.join(path, "test.csv")
-    test.to_csv(testCSV, index=False)
+        # Save test.csv
+        testCSV = os.path.join(path, "test.csv")
+        test.to_csv(testCSV, index=False)
