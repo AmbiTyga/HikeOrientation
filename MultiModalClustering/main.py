@@ -63,7 +63,7 @@ def cluster_test(args):
     group_move(data, dataset.path)
 
 
-my_parser = argparse.ArgumentParser()
+my_parser = argparse.ArgumentParser(fromfile_prefix_chars="@")
 
 my_parser.add_argument("command", choices=["cluster-train", "cluster-test"])
 
@@ -74,7 +74,9 @@ my_parser.add_argument(
 my_parser.add_argument(
     "--model_path", type=str, help="path to the directory for output model"
 )
+
 my_parser.add_argument("--k", default=2, type=int, help="no. of clusters")
+
 my_parser.add_argument(
     "--batch_size", default=2, type=int, help="batch size to load into extractors"
 )

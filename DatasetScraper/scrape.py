@@ -29,7 +29,7 @@ def scrape(args):
     obj.divide(N)
 
 
-my_parser = argparse.ArgumentParser()
+my_parser = argparse.ArgumentParser(fromfile_prefix_chars="@")
 subparser = my_parser.add_subparsers()
 
 scraper = subparser.add_parser("scrape")

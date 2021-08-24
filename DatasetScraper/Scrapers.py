@@ -321,7 +321,6 @@ class AllRecipes:
         # Save and close CSV
         csv_file.close()
 
-
     def divide(self, N):
         """
         Divide dataset to train set of size N and test set of (total_extracted - N)
