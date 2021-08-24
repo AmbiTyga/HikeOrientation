@@ -3,6 +3,10 @@ import shutil
 import os
 
 def downloadImage(url,filepath,filename):
+    """
+    Download from url, save to the filepath with filename
+    """
+    
     r = requests.get(url, stream = True)
     destination = os.path.join(filepath,filename)
     if r.status_code == 200:
