@@ -10,7 +10,7 @@ In this assignment we have to extract images and text from following websites:
 - [allrecipes-Vegetarian Main Dishes](https://www.allrecipes.com/recipes/265/everyday-cooking/vegetarian/main-dishes/)
 
 ### Experiment
-In the [config.txt](DatasetScraper/config.txt), change value under `--total_size` to extract the specific number of datapoints. By default it is 10
+Create a text file and input the total number of datapoints to be scraped. Specify the path to that text file to the argument `--total_size` to extract the specific number of datapoints. By default it is 10
 
 Run following commands:
 
@@ -18,7 +18,7 @@ Run following commands:
 python3 DatasetScraper/main.py scrape \\
 	--url <myntra/allRecipes>
 	--filepath <path>
-	DatasetScraper/@config.txt
+	--total_size @DatasetScraper/config.txt
 ```
 
 After Scraping CLI will ask for Train set's size, and divide the dataset to `clustering_train` and `clustering_test` directory. Each directory will contain scraped images and a CSV file for textual data.
@@ -29,7 +29,7 @@ In this assignment apply the K-Means algorithm, over the fused representation of
 We used BERT-base and ViT for creating representation of text and image respectively.
 
 ### Experiment
-In the [config.txt](MultiModalClustering/config.txt), change value under `--k` to specify number of centroids for K-Mean algorithm. By default it is 2.
+Create a text file and input the total number of clusters for the K-mean algorithm to form. Specify the path to that text file to the argument `--k`. This will specify number of centroids for K-Mean algorithm. By default it is 2.
 
 Run following commands:
 
@@ -39,14 +39,14 @@ python3 MultiModalClustering/main.py cluster-train \\
 	--datapath <path>/clustering_train
 	--modelpath <path to save kmean algorithm>
 	--batch_size <number of datapoints to process at each iteration>
-	MultiModalClustering/@config.txt
+	--k @<path to configuration text file>
 	
 ## For Testing
 python3 MultiModalClustering/main.py cluster-test \\
 	--datapath <path>/clustering_test
 	--modelpath <path to pickled kmean algorithm>
 	--batch_size <number of datapoints to process at each iteration>
-	MultiModalClustering/@config.txt
+	--k @<path to configuration text file>
 ```
 
 After training or testing the images in clustering_train and clustering_test will be moved to clustered directory respectively with CSV file containing cluster class to which particular instance belongs to.
