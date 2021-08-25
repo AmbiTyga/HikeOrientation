@@ -26,7 +26,7 @@ After Scraping CLI will ask for Train set's size, and divide the dataset to `clu
 ## Clustering
 
 In this assignment apply the K-Means algorithm, over the fused representation of texts and images. 
-We used BERT-base and ViT for creating representation of text and image respectively.
+I used [BERT-base](https://arxiv.org/abs/1810.04805) and [ViT](https://arxiv.org/abs/2010.11929) for creating representation of text and image respectively.
 
 ### Experiment
 Create a text file and input the total number of clusters for the K-mean algorithm to form. Specify the path to that text file to the argument `--k`. This will specify number of centroids for K-Mean algorithm. By default it is 2.
